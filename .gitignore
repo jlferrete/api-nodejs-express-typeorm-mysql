@@ -1,1 +1,3 @@
 /api-nodejs-express-typeorm-mysql.code-workspace
+#node_modules
+/node_modules
