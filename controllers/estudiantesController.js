@@ -1,3 +1,5 @@
+const db = require('../database/conexion.js');
+
 class EstudiantesController{
     constructor(){
 
@@ -8,7 +10,26 @@ class EstudiantesController{
     }
     
     ingresar(req, res) {
-        res.json({msg : 'Ingreso Estudiante'})
+        try {
+            const { dni, nombre, apellido, email } = req.body;
+
+            console.log(dni, nombre, apellido, email)
+
+            // Utiliza ? para los valores de la consulta SQL
+            const query = `INSERT INTO estudiantes (dni, nombre, apellido, email) VALUES (?, ?, ?, ?)`;
+            
+            // Pasa los valores en un array en el orden correcto
+            db.query(query, [dni, nombre, apellido, email], (err, rows) => {
+                if(err){
+                    res.status(400).send(err);
+                }
+                res.status(201).json( {id: rows.insertId })
+            }
+        );
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.message);
+        }
     }
     
     consultarDetalle(req, res) {
